@@ -6,11 +6,10 @@ import 'dart:convert';
 
 const kWebUrl =
     'https://ap.studio-uat.chubb.com/v2/sg/dbs/staycation/pweb-sp/en-SG';
-    
 
 class TXWebView extends StatefulWidget {
-  const TXWebView({Key? key}) : super(key: key);
-
+  const TXWebView({Key? key, this.webUrl}) : super(key: key);
+  final String? webUrl;
   @override
   _TXWebViewState createState() => _TXWebViewState();
 }
@@ -18,14 +17,24 @@ class TXWebView extends StatefulWidget {
 class _TXWebViewState extends State<TXWebView> {
   WebViewController? _controller;
   bool isLoading = true;
+  double _progressValue = 0.0;
+
   Widget _buildWebView() {
     return WebView(
-      initialUrl: kWebUrl,
+      initialUrl: widget.webUrl ?? kWebUrl,
       onWebViewCreated: (WebViewController controller) {
         _controller = controller;
         // _loadLocalHtmlFile();
       },
-      onProgress: (int progress) {},
+      onPageStarted: (value) {},
+      onProgress: (int progress) {
+        if (kDebugMode) {
+          print('Progress $progress');
+        }
+        setState(() {
+          _progressValue += progress;
+        });
+      },
       onPageFinished: (String url) {
         setState(() {
           isLoading = false;
@@ -56,8 +65,12 @@ class _TXWebViewState extends State<TXWebView> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-            elevation: 0,
-            title: const Text(''),
+            // elevation: 0,
+            title: const Text(
+              'Insurance',
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
             backgroundColor: Colors.white,
             leading: Padding(
               padding: const EdgeInsets.only(right: 8),
@@ -70,19 +83,18 @@ class _TXWebViewState extends State<TXWebView> {
                 ),
               ),
             )),
-        body: Stack(children: [
-          _buildWebView(),
+        body: Column(children: [
           isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
+              ? LinearProgressIndicator(
+                  backgroundColor: Colors.orange,
+                  value: _progressValue,
                 )
-              : Stack(),
+              : Container(),
+          Expanded(child: _buildWebView()),
         ]),
       ),
     );
   }
-
-
 
   _loadLocalHtmlFile() async {
     String fileText = """
