@@ -1,12 +1,3 @@
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-
-// class Teamxweb {
-//   static const MethodChannel _channel = MethodChannel('teamxweb');
-
-//   static Future<String?> get platformVersion async {
-//     final String? version = await _channel.invokeMethod('getPlatformVersion');
-//     return version;
-//   }
-// }
+// ignore: unused_import
+import 'package:teamxweb/src/tx_web_view.dart';
+export 'package:teamxweb/src/tx_web_view.dart';
