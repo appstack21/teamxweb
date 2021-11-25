@@ -52,7 +52,7 @@ class _TXWebViewState extends State<TXWebView> {
               print("message from the web view=\"${message.message}\"");
             }
             //this is success call back
-            Navigator.of(context, rootNavigator: true).pop("Discard");
+            Navigator.of(context).pop();
           },
         )
       },
@@ -86,7 +86,6 @@ class _TXWebViewState extends State<TXWebView> {
         body: Column(children: [
           isLoading
               ? LinearProgressIndicator(
-                  backgroundColor: Colors.orange,
                   value: _progressValue,
                 )
               : Container(),
